@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Piedra, Papel o Tijera</title>
+
+<style>
+    body {
+        font-family: "Arial", sans-serif;
+        margin: 0;
+        background: linear-gradient(135deg, #8fd3f4, #84fab0);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .contenedor {
+        background: white;
+        padding: 40px;
+        border-radius: 15px;
+        width: 350px;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        animation: aparecer 0.6s ease-in-out;
+    }
+
+    @keyframes aparecer {
+        from { opacity: 0; transform: scale(0.8); }
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    h1, h2 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    button {
+        background: #4CAF50;
+        border: none;
+        color: white;
+        padding: 12px 20px;
+        margin: 10px 0;
+        width: 80%;
+        font-size: 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background: #45a049;
+        transform: scale(1.05);
+    }
+
+    .opciones button {
+        width: 90%;
+        background: #2196F3;
+    }
+
+    .opciones button:hover {
+        background: #1976D2;
+    }
+
+    #resultado {
+        font-size: 22px;
+        margin-top: 20px;
+        font-weight: bold;
+        color: #333;
+        min-height: 30px;
+    }
+
+    #elecciones {
+        color: #555;
+        font-size: 16px;
+        margin-top: 15px;
+    }
+</style>
+
+</head>
+<body>
+
+<div class="contenedor">
+
+    <!-- Pantalla de inicio -->
+    <div id="inicio">
+        <h1>Piedra, Papel o Tijera</h1>
+        <p>Presiona para comenzar</p>
+        <button onclick="iniciarJuego()">Iniciar</button>
+    </div>
+
+    <!-- Pantalla del juego -->
+    <div id="juego" style="display:none;">
+        <h2>Elige tu jugada:</h2>
+
+        <div class="opciones">
+            <button onclick="jugar('piedra')">🪨 Piedra</button>
+            <button onclick="jugar('papel')">📄 Papel</button>
+            <button onclick="jugar('tijera')">✂️ Tijera</button>
+        </div>
+
+        <p id="elecciones"></p>
+        <p id="resultado"></p>
+
+        <button onclick="regresar()" style="background:#FF5252;">Regresar</button>
+    </div>
+
+</div>
+
+<script>
+function iniciarJuego() {
+    document.getElementById("inicio").style.display = "none";
+    document.getElementById("juego").style.display = "block";
+}
+
+function regresar() {
+    document.getElementById("inicio").style.display = "block";
+    document.getElementById("juego").style.display = "none";
+    document.getElementById("resultado").textContent = "";
+    document.getElementById("elecciones").textContent = "";
+}
+
+function jugar(eleccionJugador) {
+    const opciones = ["piedra", "papel", "tijera"];
+    const eleccionPC = opciones[Math.floor(Math.random() * 3)];
+
+    let mensaje = "";
+
+    if (eleccionJugador === eleccionPC) {
+        mensaje = "🤝 Empate";
+    } else if (
+        (eleccionJugador === "piedra" && eleccionPC === "tijera") ||
+        (eleccionJugador === "papel" && eleccionPC === "piedra") ||
+        (eleccionJugador === "tijera" && eleccionPC === "papel")
+    ) {
+        mensaje = "🎉 ¡Ganaste!";
+    } else {
+        mensaje = "😢 Perdiste";
+    }
+
+    document.getElementById("elecciones").textContent = 
+        "Tú elegiste: " + eleccionJugador + " | PC eligió: " + eleccionPC;
+
+    document.getElementById("resultado").textContent = mensaje;
+}
+</script>
+
+</body>
+</html>
