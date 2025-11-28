@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Adivina el Número</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #89f7fe, #66a6ff);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .game-box {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        width: 340px;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        animation: aparecer 0.6s ease-in-out;
+    }
+
+    @keyframes aparecer {
+        from { opacity: 0; transform: scale(0.8); }
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    h2 {
+        margin: 0 0 15px 0;
+        color: #333;
+    }
+
+    input {
+        padding: 12px;
+        width: 85%;
+        font-size: 18px;
+        border: 2px solid #66a6ff;
+        border-radius: 10px;
+        margin-top: 15px;
+        outline: none;
+    }
+
+    button {
+        padding: 12px 20px;
+        margin-top: 15px;
+        font-size: 16px;
+        border: none;
+        background: #66a6ff;
+        color: white;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background: #4b85e5;
+        transform: scale(1.05);
+    }
+
+    #mensaje {
+        font-size: 18px;
+        margin-top: 15px;
+        height: 30px;
+        color: #333;
+    }
+
+    #intentos {
+        margin-top: 5px;
+        font-size: 16px;
+        color: #444;
+    }
+
+    /* Confeti */
+    .confeti {
+        position: fixed;
+        top: -10px;
+        width: 10px;
+        height: 10px;
+        background: red;
+        animation: caer 3s linear forwards;
+        opacity: 0.8;
+    }
+
+    @keyframes caer {
+        to {
+            transform: translateY(100vh) rotate(720deg);
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="game-box">
+    <h2>🎯 Adivina el Número (1 al 100)</h2>
+
+    <input type="number" id="entrada" placeholder="Escribe un número">
+
+    <button onclick="adivinar()">Adivinar</button>
+    <button onclick="reiniciar()">Reiniciar</button>
+
+    <p id="mensaje"></p>
+    <p id="intentos"></p>
+</div>
+
+<script>
+    let numeroSecreto = Math.floor(Math.random() * 100) + 1;
+    let intentos = 0;
+
+    function adivinar() {
+        let valor = Number(document.getElementById("entrada").value);
+        let mensaje = document.getElementById("mensaje");
+        let mostrarIntentos = document.getElementById("intentos");
+
+        if (valor < 1 || valor > 100) {
+            mensaje.textContent = "Solo números del 1 al 100.";
+            return;
+        }
+
+        intentos++;
+
+        if (valor === numeroSecreto) {
+            mensaje.textContent = " ¡Correcto! Ese era el número.";
+            lanzarConfeti(80);
+        }
+        else if (valor < numeroSecreto) {
+            mensaje.textContent = " Muy bajo.";
+        } 
+        else {
+            mensaje.textContent = " Muy alto.";
+        }
+
+        mostrarIntentos.textContent = "Intentos: " + intentos;
+    }
+
+    function reiniciar() {
+        numeroSecreto = Math.floor(Math.random() * 100) + 1;
+        intentos = 0;
+        document.getElementById("mensaje").textContent = "";
+        document.getElementById("intentos").textContent = "";
+        document.getElementById("entrada").value = "";
+    }
+
+    function lanzarConfeti(total) {
+        for (let i = 0; i < total; i++) {
+            let conf = document.createElement("div");
+            conf.classList.add("confeti");
+
+            conf.style.left = Math.random() * 100 + "vw";
+            conf.style.background = coloresRandom();
+            conf.style.animationDuration = (Math.random() * 2 + 2) + "s";
+            conf.style.width = conf.style.height = (Math.random()*8 + 6) + "px";
+
+            document.body.appendChild(conf);
+
+            setTimeout(() => conf.remove(), 3500);
+        }
+    }
+
+    function coloresRandom() {
+        const colores = ["#ff4d4d", "#4d79ff", "#4dff4d", "#ffff4d", "#ff9d4d", "#ff4da6"];
+        return colores[Math.floor(Math.random() * colores.length)];
+    }
+</script>
+
+</body>
+</html>
